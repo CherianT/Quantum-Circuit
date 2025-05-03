@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quantum Circuit Simulator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Quantum Circuit Simulator</h1>
+    <div id="circuit-builder">
+        <button onclick="addHadamard()">Add Hadamard Gate</button>
+        <button onclick="simulate()">Run Simulation</button>
+    </div>
+    <div id="result"></div>
+
+    <script>
+        function addHadamard() {
+            // Add gate to circuit visualization
+        }
+
+        async function simulate() {
+            const circuitData = {
+                num_qubits: 1,
+                operations: [
+                    { gate: 'H', target: 0 }
+                ]
+            };
+
+            const response = await fetch('/simulate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(circuitData)
+            });
+
+            const result = await response.json();
+            document.getElementById('result').textContent = 
+                `Measurement result: ${result.measurement}`;
+        }
+    </script>
+</body>
+</html>
