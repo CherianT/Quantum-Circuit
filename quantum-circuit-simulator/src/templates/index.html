@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quantum Circuit Simulator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Quantum Circuit Simulator</h1>
+    <div class="controls">
+        <label for="num-qubits">Number of qubits:</label>
+        <input type="number" id="num-qubits" value="1" min="1" max="4">
+    </div>
+    <div id="circuit-builder">
+        <button onclick="addGate('H')">Add Hadamard Gate</button>
+        <button onclick="addGate('X')">Add X Gate</button>
+        <button onclick="addGate('Z')">Add Z Gate</button>
+        <button onclick="clearCircuit()">Clear Circuit</button>
+        <button onclick="simulate()" class="simulate-btn">Run Simulation</button>
+    </div>
+    <div id="circuit-display"></div>
+    <div id="result"></div>
+
+    <script>
+        let circuit = {
+            num_qubits: 1,
+            operations: []
+        };
+
+        function updateNumQubits() {
+            circuit.num_qubits = parseInt(document.getElementById('num-qubits').value);
+            updateCircuitDisplay();
+        }
+
+        function addGate(gate) {
+            circuit.operations.push({
+                gate: gate,
+                target: 0
+            });
+            updateCircuitDisplay();
+        }
+
+        function clearCircuit() {
+            circuit.operations = [];
+            updateCircuitDisplay();
+            document.getElementById('result').textContent = '';
+        }
+
+        function updateCircuitDisplay() {
+            const display = document.getElementById('circuit-display');
+            display.innerHTML = `<h3>Circuit Operations:</h3>`;
+            circuit.operations.forEach((op, idx) => {
+                display.innerHTML += `<div class="operation">
+                    ${op.gate} on qubit ${op.target}
+                </div>`;
+            });
+        }
+
+        async function simulate() {
+            try {
+                const response = await fetch('/simulate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(circuit)
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById('result').innerHTML = 
+                        `<h3>Measurement Result:</h3>
+                         <p>${data.result.measurement}</p>`;
+                } else {
+                    document.getElementById('result').innerHTML = 
+                        `<h3>Error:</h3>
+                         <p>${data.error}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = 
+                    `<h3>Error:</h3>
+                     <p>Failed to simulate circuit: ${error}</p>`;
+            }
+        }
+
+        document.getElementById('num-qubits').addEventListener('change', updateNumQubits);
+    </script>
+</body>
+</html>
