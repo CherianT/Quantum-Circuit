@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quantum Circuit Simulator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="header">Quantum Circuit Simulator</h1>
+        <div class="main-content">
+            <div class="gates-panel">
+                <h3>Quantum Gates</h3>
+                <div class="gate-grid">
+                    <div class="gate" data-gate="h" draggable="true">H</div>
+                    <div class="gate" data-gate="x" draggable="true">X</div>
+                    <div class="gate" data-gate="y" draggable="true">Y</div>
+                    <div class="gate" data-gate="z" draggable="true">Z</div>
+                    <div class="gate" data-gate="cnot" draggable="true">CNOT</div>
+                    <div class="gate" data-gate="swap" draggable="true">SWAP</div>
+                    <div class="gate" data-gate="t" draggable="true">T</div>
+                    <div class="gate" data-gate="s" draggable="true">S</div>
+                </div>
+                
+                <div class="qubit-controls">
+                    <button id="add-qubit">Add Qubit</button>
+                    <button id="remove-qubit">Remove Qubit</button>
+                    <button id="clear-circuit">Clear Circuit</button>
+                    <div class="qubit-count">Qubits: <span id="qubit-count">4</span></div>
+                </div>
+            </div>
+            
+            <div class="circuit-panel">
+                <div class="qubit-area" id="qubit-area"></div>
+                <div class="circuit-buttons">
+                    <button id="run-circuit">Run Circuit</button>
+                    <button id="download-circuit">Download Circuit</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="histogram-panel">
+            <h3>Measurement Results</h3>
+            <canvas id="measurement-histogram"></canvas>
+            <div class="stats-panel">
+                <div>Circuit Depth: <span id="circuit-depth">0</span></div>
+                <div>Total Gates: <span id="total-gates">0</span></div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
